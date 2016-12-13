@@ -67,11 +67,6 @@ def render_helprequest_list_as_html(helprequests):
         helprequests=helprequests,
         priorities=PRIORITIES)
 
-def render_order_list_as_html(helprequests):
-    return render_template(
-        'order+microdata+rdfa.html',
-        helprequests=helprequests,
-        priorities=PRIORITIES)
 
 
 # Raises an error if the string x is empty (has zero length).
@@ -95,15 +90,7 @@ for arg in ['from', 'title', 'description','products']:
         help="'{}' is a required value".format(arg))
 
 
-new_order_parser = reqparse.RequestParser()
-for arg in ['from', 'title', 'products']:
-    new_order_parser.add_argument(
-        arg, type=nonempty_string,  required=True,
-        help="'{}' is a required value".format(arg))
-    new_order_parser.add_argument(
-        "products",
-        type=nonempty_string, action="append", required=True,
-        help="'{}' is a required value".format(arg))
+
 
 
 # Specify the data necessary to update an existing help request.
@@ -195,9 +182,25 @@ class HelpRequestListAsJSON(Resource):
 
 
 
+def render_order_list_as_html(helprequests):
+    return render_template(
+        'order+microdata+rdfa.html',
+        helprequests=helprequests,
+        priorities=PRIORITIES)
 
 
 
+
+
+new_order_parser = reqparse.RequestParser()
+for arg in ['from', 'title', 'products']:
+    new_order_parser.add_argument(
+        arg, type=nonempty_string,  required=True,
+        help="'{}' is a required value".format(arg))
+    new_order_parser.add_argument(
+        "products",
+        type=nonempty_string, action="append", required=True,
+        help="'{}' is a required value".format(arg))
 
 
 
@@ -213,11 +216,10 @@ class OrderList(Resource):
     # representation of the updated list.
     def post(self):
         order = new_order_parser.parse_args()
+        order = {}
         order_id = generate_id()
         order['@id'] = 'request/' + order_id
         order['@type'] = 'helpdesk:HelpRequest'
-        order['time'] = datetime.isoformat(datetime.now())
-        order['priority'] = PRIORITIES.index('normal')
         data['helprequests'][order_id] = order
         return make_response(
             render_order_list_as_html(

@@ -3,19 +3,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <title>All open help requests</title>
 
-{% if request.args["sort_by"] == "priority" %}
-<a href="{{ url_for('helprequestlist') }}?sort_by=time">sort by time</a>
-{% else %}
-<a href="{{ url_for('helprequestlist') }}?sort_by=priority">sort by priority</a>
-{% endif %}
-
-<form class="search" method="get">
-  <input name="query" type="text" value="{{ request.args["query"] }}">
-  {% if 'sort_by' in request.args %}
-  <input name="sort_by" type="hidden" value="{{ request.args["sort_by"] }}">
-  {% endif %}
-  <input class="query" type="submit" value="search">
-</form>
 
 <ol>
   {% for farm_id, helprequest in farms %}
@@ -27,11 +14,10 @@
       property="helpdesk:helprequests"
       typeof="helpdesk:HelpRequest">
     <div itemprop="http://www.w3.org/ns/md#item"
-         itemscope itemtype="http://schema.org/CreativeWork/HelpRequest">
+         itemscope itemtype="http://schema.org/CreativeWork/LocalBusiness">
     <time itemprop="dateCreated"
           property="dateCreated"
           datetime="{{ helprequest.time }}">{{ helprequest.time }}</time>
-    priority: {{ priorities[helprequest.priority] }}
     <a href="{{ url_for('helprequest', farm_id=farm_id) }}">
       <span itemprop="name" property="name">{{ helprequest.title }}</span>
     </a>
@@ -65,7 +51,7 @@ $(document).ready(function() {
 
 
 
-<form class="helprequest-editor" action="{{ url_for('helprequestlist') }}" method="post">
+<form class="request-editor" action="{{ url_for('helprequestlist') }}" method="post">
   
   <label>Farmers Market Name
     <br>
@@ -85,10 +71,6 @@ $(document).ready(function() {
          <button class="add_field_button">Add More Products(MAX 15)</button>
         </div> 
       <input type="text" name="products" value="warm" />  <br/>
-      
-       
- 
-
   <br>  
   <input class="create" type="submit" value="create new Farmers Market">
 

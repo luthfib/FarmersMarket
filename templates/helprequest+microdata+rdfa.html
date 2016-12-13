@@ -2,10 +2,9 @@
 <link rel="alternate" type="application/json" href="{{ request.path }}.json">
 <title>{{ farm.title }}</title>
 
-<body itemscope itemtype="http://schema.org/CreativeWork/HelpRequest"
+<body itemscope itemtype="http://schema.org/CreativeWork/LocalBusiness"
                 vocab="http://schema.org/"
-                prefix="helpdesk:https://rawgit.com/sils-webinfo/helpdesk/master/vocab.ttl#"
-                typeof="helpdesk:HelpRequest">
+                prefix="helpdesk:https://rawgit.com/sils-webinfo/helpdesk/master/vocab.ttl#">
 
 <a href="http://www.w3.org/2012/pyRdfa/extract?uri=referer">
 view data extracted from RDFa markup</a><br>
@@ -14,53 +13,39 @@ view data extracted from microdata markup</a><br>
 <a href="{{ request.path }}.json">
 view data as JSON-LD</a>
 
-<h1 class="title" itemprop="name" property="name">{{ farm.title }}</h1>  
+<h1 class="title" itemprop="name" property="LocalBusiness">{{ farm.title }}</h1>  
 
 <p class="description" itemprop="description" property="description">{{ farm. description }}</p>
 
-<p class="from" itemprop="creator" itemscope itemtype="http://schema.org/Person"
-   property="creator" typeof="Person">>
-  <span itemprop="email" property="email">{{ farm.from }}</span>
-</p>
+
 
 <time itemprop="dateCreated" property="dateCreated"
       datetime="{{ farm.time }}">{{ farm.time }}</time>
 
 <form class="help-request-editor" method="patch">
-  <label>priority
-  <select name="priority">
-    {% for value, label in priorities %}
-    <option value="{{ value }}" {% if farm.priority == value %}selected{% endif %}>
-      {{ label }}
-    </option>
-    {% endfor %}
-    </select>
-  </label>
+  
   <br>
 
 
-<form class="helprequest-editor" action="{{ url_for('orderlist') }}" method="post">
+<form class="request-editor" action="{{ url_for('order') }}" method="post">
   <label>Items<br>
     </label>
     <ul>
       {% for item in farm.products %}
-      <li itemprop="d" itemscope itemtype="http://schema.org/d"
-          property="d" typeof="d">
-        <p itemprop="text" property="text">{{ item }}</p>
+      <li itemprop="products" itemscope itemtype="http://schema.org/products"
+          property="products" typeof="products">
+        
         <input type="checkbox" name="products" value="{{ item }}" /> {{ item }} <br/>
       </li>
       {% endfor %}
         <input class="create" type="submit" value="Order">
         </form>
     </ul>
-  
   <br
-
- 
-
-
 
 <br>
 <a rel="collection" href="{{ url_for('helprequestlist') }}">all help requests</a>
-<a rel="collection" href="{{ url_for('orderlist') }}">Orders</a>
+
 </body>
+
+

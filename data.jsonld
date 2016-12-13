@@ -5,20 +5,18 @@
 			"@id": "http://www.w3.org/2000/01/rdf-schema#member",
 			"@container": "@index"
 		},
-		"title": "http://schema.org/name",
+		"title": "http://schema.org/LocalBusiness",
 		"description": "http://schema.org/description",
-		"from": "http://schema.org/creator",
 		"time": "http://schema.org/dateCreated",
-		"items": "http://schema.org/comment"
+		"products": "http://schema.org/product"
 	},
 	"orders": {
 
-		"item-uuid": 10
+		"order_id": 10
 
 	},
 
 	"products": {
-
 		"name": "pear",
 		"price": 10,
 		"farm": "phillips Farm"
@@ -29,7 +27,7 @@
 	"@id": "requests",
 	"farms": {
 		"fhs6jo": {
-			"@type": "helpdesk:HelpRequest",
+	
 			"@id": "request/fhs6jo",
 			"title": "Flying Dutchman",
 			"description": "This is the best store",
@@ -40,7 +38,7 @@
 			"products": ["apple", "bear"]
 		},
 		"dig73h": {
-			"@type": "helpdesk:HelpRequest",
+		
 			"@id": "request/dig73h",
 			"title": "Steak Galore",
 			"description": "We are the steak kingddom",
@@ -49,7 +47,7 @@
 			"products": ["fried steak", "juice steak"]
 		},
 		"0f4uqv": {
-			"@type": "helpdesk:HelpRequest",
+			
 			"@id": "request/0f4uqv",
 			"title": "Phillips Farm",
 			"description": "We sell the best Fruits",

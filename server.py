@@ -91,17 +91,6 @@ for arg in ['title', 'description','products']:
 
 
 
-
-
-# Specify the data necessary to update an existing help request.
-# Only the priority and comments can be updated.
-update_helprequest_parser = reqparse.RequestParser()
-update_helprequest_parser.add_argument(
-    'priority', type=int, default=PRIORITIES.index('normal'))
-update_helprequest_parser.add_argument(
-    'product', type=str, default='')
-
-
 # Specify the parameters for filtering and sorting help requests.
 # See `filter_and_sort_helprequests` above.
 query_parser = reqparse.RequestParser()
@@ -165,7 +154,6 @@ class HelpRequestList(Resource):
         farm = new_helprequest_parser.parse_args()
         farm_id = generate_id()
         farm['@id'] = 'request/' + farm_id
-        farm['@type'] = 'helpdesk:HelpRequest'
         farm['time'] = datetime.isoformat(datetime.now())
         farm['priority'] = PRIORITIES.index('normal')
         data['farms'][farm_id] = farm
@@ -192,14 +180,49 @@ def render_order_list_as_html(order):
 
 
 new_order_parser = reqparse.RequestParser()
-for arg in [ 'title', 'products']:
-    new_order_parser.add_argument(
+for arg in ['name', 'price','farm',]:
+    new_helprequest_parser.add_argument(
         arg, type=nonempty_string,  required=True,
         help="'{}' is a required value".format(arg))
-    new_order_parser.add_argument(
+    new_helprequest_parser.add_argument(
         "products",
         type=nonempty_string, action="append", required=True,
         help="'{}' is a required value".format(arg))
+
+
+
+
+class Order(Resource):
+    # If a help request with the specified ID does not exist,
+    # respond with a 404, otherwise respond with an HTML representation.
+    def get(self, order_id):
+        error_if_helprequest_not_found(order_id)
+        return make_response(
+            render_helprequest_as_html(
+                order_id), 200)
+
+    # If a help request with the specified ID does not exist,
+    # respond with a 404, otherwise update the help request and respond
+    # with the updated HTML representation.
+    def patch(self, order_id):
+        error_if_helprequest_not_found(order_id)
+        farm = data['order_id'][order_id]
+        update = update_helprequest_parser.parse_args()
+        farm['priority'] = update['priority']
+        if len(update['product'].strip()) > 0:
+            farm.setdefault("products", []).append(update['product'])
+        return make_response(
+            render_helprequest_as_html(farm), 200)
+
+
+class OrderAsJSON(Resource):    
+    # If a help request with the specified ID does not exist,
+    # respond with a 404, otherwise respond with a JSON representation.
+    def get(self, order_id):
+        error_if_helprequest_not_found(order_id)
+        order = data['orders'][order_id]
+        order['@context'] = data['@context']
+        return order
 
 
 
@@ -224,9 +247,6 @@ class OrderList(Resource):
             render_order_list_as_html(
                 order), 201)
 
-
-
-
 # Define a resource for getting a JSON representation of a EventList.
 class OrderListAsJSON(Resource):
     def get(self):
@@ -243,8 +263,10 @@ api.add_resource(HelpRequestList, '/requests')
 api.add_resource(HelpRequestListAsJSON, '/requests.json')
 api.add_resource(HelpRequest, '/request/<string:farm_id>')
 api.add_resource(HelpRequestAsJSON, '/request/<string:farm_id>.json')
-api.add_resource(OrderList, '/order_requests')
-api.add_resource(OrderListAsJSON, '/order_requests.json')
+api.add_resource(Order, '/order_requests')
+api.add_resource(OrderAsJSON, '/order_requests.json')
+api.add_resource(OrderList, '/order_requests/<string:farm_id>')
+api.add_resource(OrderListAsJSON, '/order_requests/<string:farm_id>.json')
 
 
 

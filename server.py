@@ -216,6 +216,7 @@ class OrderList(Resource):
     # representation of the updated list.
     def post(self):
         order = new_order_parser.parse_args()
+        print(new_order_parser)
         order = {}
         order_id = generate_id()
         order['@id'] = 'request/' + order_id

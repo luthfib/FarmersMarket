@@ -54,7 +54,7 @@ $(document).ready(function() {
         e.preventDefault();
         if(x < max_fields){ //max input box allowed
             x++; //text box increment
-            $(wrapper).append('<div><input type="text" name="prodcts"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+            $(wrapper).append('<div><input type="text" name="other"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
         }
     });
     
@@ -80,14 +80,14 @@ $(document).ready(function() {
   <br>
   <label>Products
     <br>
-    <div class="create">
-      <button class="add_field_button">Add More Fields</button>
-  <textarea name="products"></textarea>
-  <textarea name="products"></textarea>
+      <input type="text" name="products[]" value="warm" /> Warm <br/>
+        <input type="text" name="products[]" value="Cold" /> Cold <br/>
+        <input type="text" name="products[]" value="Iced" /> Iced <br/>
+ 
   </label>
   <br>  
   <input class="create" type="submit" value="create new Farmers Market">
-</div>
+
 </form>
 
 

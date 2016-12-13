@@ -79,7 +79,7 @@ def nonempty_string(x):
 # Specify the data necessary to create a new help request.
 # "from", "title", and "description" are all required values.
 new_helprequest_parser = reqparse.RequestParser()
-for arg in ['from', 'title', 'description','products']:
+for arg in ['from', 'title', 'description','products[]']:
     new_helprequest_parser.add_argument(
         arg, type=nonempty_string, required=True,
         help="'{}' is a required value".format(arg))
@@ -123,7 +123,7 @@ class HelpRequest(Resource):
         update = update_helprequest_parser.parse_args()
         helprequest['priority'] = update['priority']
         if len(update['product'].strip()) > 0:
-            helprequest.setdefault('products', []).append(update['product'])
+            helprequest.setdefault("products", []).append(update['product'])
         return make_response(
             render_helprequest_as_html(helprequest), 200)
 

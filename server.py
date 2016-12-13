@@ -182,10 +182,10 @@ class HelpRequestListAsJSON(Resource):
 
 
 
-def render_order_list_as_html(helprequests):
+def render_order_list_as_html(order):
     return render_template(
         'order+microdata+rdfa.html',
-        helprequests=helprequests,
+        order=order,
         priorities=PRIORITIES)
 
 
@@ -193,7 +193,7 @@ def render_order_list_as_html(helprequests):
 
 
 new_order_parser = reqparse.RequestParser()
-for arg in ['from', 'title', 'products']:
+for arg in [ 'title', 'products']:
     new_order_parser.add_argument(
         arg, type=nonempty_string,  required=True,
         help="'{}' is a required value".format(arg))
@@ -219,9 +219,7 @@ class OrderList(Resource):
         print(new_order_parser)
         order = {}
         order_id = generate_id()
-        order['@id'] = 'request/' + order_id
-        order['@type'] = 'helpdesk:HelpRequest'
-        data['helprequests'][order_id] = order
+        order['products'] = 'request/' + order_id
         return make_response(
             render_order_list_as_html(
                 filter_and_sort_helprequests()), 201)

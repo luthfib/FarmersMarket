@@ -6,11 +6,11 @@
 <a href="{{ request.path }}.json">
 view data as JSON-LD</a>
 
- {% for item in order.products %}
+ {% for item in order %}
       <li itemprop="d" itemscope itemtype="http://schema.org/d"
           property="d" typeof="d">
-        <p itemprop="text" property="text">{{ item }}</p>
-        <input type="checkbox" name="products" value="{{ item }}" /> {{ item }} <br/>
+        <p itemprop="text" property="text">{{ item.products }}</p>
+       
       </li>
       {% endfor %}
 

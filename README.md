@@ -44,3 +44,26 @@ To run it:
    ```
    Alternatively, you can access the service running here: http://aeshin.org:5556/contacts.json
    
+   
+   
+   Types and Properties: 
+   
+   title/Local Businesss : This describes a schema defintion under place that describes a local businesss  http://schema.org/LocalBusiness
+   
+   description: Description of the obejct, in the case a farm market http://schema.org/description
+   
+   time: Time in which the farm resouce was created  http://schema.org/dateCreated
+   
+   item: Any offered product or service.In this case it is the items being sold by the farm  https://schema.org/Product
+   
+   
+   Classes
+   
+   Create: Used a create classs that was used to create farms and producs
+   
+   Create-button-class was used to create new instances of the product text field so that farmers can add mulitple things to thier farm
+   
+   
+   
+   
+   

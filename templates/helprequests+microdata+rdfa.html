@@ -45,8 +45,8 @@
 
 <script>
 $(document).ready(function() {
-    var max_fields      = 10; //maximum input boxes allowed
-    var wrapper         = $(".create"); //Fields wrapper
+    var max_fields      = 15; //maximum input boxes allowed
+    var wrapper         = $(".new_box"); //Fields wrapper
     var add_button      = $(".add_field_button"); //Add button ID
     
     var x = 1; //initlal text box count
@@ -54,10 +54,9 @@ $(document).ready(function() {
         e.preventDefault();
         if(x < max_fields){ //max input box allowed
             x++; //text box increment
-            $(wrapper).append('<div><input type="text" name="other"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+            $(wrapper).append('<div><input type="text" name="products"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
         }
     });
-    
     $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
         e.preventDefault(); $(this).parent('div').remove(); x--;
     })
@@ -75,16 +74,25 @@ $(document).ready(function() {
     <input name="title" type="text">
   </label>
   <br>
+  <label>Description
+     </label>
+     <br>
   <textarea name="description"></textarea>
   <br>  
   <br>
   <label>Products
+     </label>
     <br>
-      <input type="text" name="products[]" value="warm" /> Warm <br/>
-        <input type="text" name="products[]" value="Cold" /> Cold <br/>
-        <input type="text" name="products[]" value="Iced" /> Iced <br/>
+     <div class="new_box">
+         <button class="add_field_button">Add More Products(MAX 15)</button>
+        </div> 
+      <input type="text" name="products" value="warm" /> Warm <br/>
+        <input type="text" name="products" value="Cold" /> Cold <br/>
+        <input type="text" name="products" value="Iced" /> Iced <br/>
+
+       
  
-  </label>
+
   <br>  
   <input class="create" type="submit" value="create new Farmers Market">
 

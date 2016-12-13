@@ -79,9 +79,13 @@ def nonempty_string(x):
 # Specify the data necessary to create a new help request.
 # "from", "title", and "description" are all required values.
 new_helprequest_parser = reqparse.RequestParser()
-for arg in ['from', 'title', 'description','products[]']:
+for arg in ['from', 'title', 'description','products']:
     new_helprequest_parser.add_argument(
-        arg, type=nonempty_string, required=True,
+        arg, type=nonempty_string,  required=True,
+        help="'{}' is a required value".format(arg))
+    new_helprequest_parser.add_argument(
+        "products",
+        type=nonempty_string, action="append", required=True,
         help="'{}' is a required value".format(arg))
 
 
@@ -172,6 +176,54 @@ class HelpRequestListAsJSON(Resource):
         return data
 
 
+
+
+
+
+
+
+
+def parserArgs(parser, elements):
+    for arg in elements:
+        parser.add_argument(
+            arg, type=nonempty_string, required=True,
+            help="'{}' is a required value".format(arg))
+
+
+class OrderList(Resource):
+    # Respond with an HTML representation of the help request list, after
+    # applying any filtering and sorting parameters.
+    def get(self):
+        query = query_parser.parse_args()
+        return make_response(
+            render_helprequest_list_as_html(
+                filter_and_sort_helprequests(**query)), 200)
+    # Add a new help request to the list, and respond with an HTML
+    # representation of the updated list.
+    def post(self):
+        helprequest = new_helprequest_parser.parse_args()
+        helprequest_id = generate_id()
+        helprequest['@id'] = 'request/' + helprequest_id
+        helprequest['@type'] = 'helpdesk:HelpRequest'
+        helprequest['time'] = datetime.isoformat(datetime.now())
+        helprequest['priority'] = PRIORITIES.index('normal')
+        data['helprequests'][helprequest_id] = helprequest
+        return make_response(
+            render_helprequest_list_as_html(
+                filter_and_sort_helprequests()), 201)
+
+
+
+
+# Define a resource for getting a JSON representation of a EventList.
+class OrderListAsJSON(Resource):
+    def get(self):
+        return data
+
+
+
+
+
 # Assign URL paths to our resources.
 app = Flask(__name__)
 api = Api(app)
@@ -179,11 +231,9 @@ api.add_resource(HelpRequestList, '/requests')
 api.add_resource(HelpRequestListAsJSON, '/requests.json')
 api.add_resource(HelpRequest, '/request/<string:helprequest_id>')
 api.add_resource(HelpRequestAsJSON, '/request/<string:helprequest_id>.json')
+api.add_resource(OrderList, '/order_requests')
+api.add_resource(OrderListAsJSON,'/order_requests.json')
 
-#api.add_resource(FarmRequestList, '/farm_requests')
-#api.add_resource(FarmRequestListAsJSON,'/farm_requests.json)
-#api.add_resource(FarmRequest, '/farm_request/<string:farm_request_id>')
-#api.add_resource(FarmRequestAsJSON, '/farm_request/<string:farm_request_id>.json')
 
 
 # Redirect from the index to the list of help requests.

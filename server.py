@@ -79,7 +79,7 @@ def nonempty_string(x):
 # Specify the data necessary to create a new help request.
 # "from", "title", and "description" are all required values.
 new_helprequest_parser = reqparse.RequestParser()
-for arg in ['from', 'title', 'description']:
+for arg in ['from', 'title', 'description','products']:
     new_helprequest_parser.add_argument(
         arg, type=nonempty_string, required=True,
         help="'{}' is a required value".format(arg))
@@ -91,7 +91,7 @@ update_helprequest_parser = reqparse.RequestParser()
 update_helprequest_parser.add_argument(
     'priority', type=int, default=PRIORITIES.index('normal'))
 update_helprequest_parser.add_argument(
-    'comment', type=str, default='')
+    'product', type=str, default='')
 
 
 # Specify the parameters for filtering and sorting help requests.
@@ -122,8 +122,8 @@ class HelpRequest(Resource):
         helprequest = data['helprequests'][helprequest_id]
         update = update_helprequest_parser.parse_args()
         helprequest['priority'] = update['priority']
-        if len(update['comment'].strip()) > 0:
-            helprequest.setdefault('comments', []).append(update['comment'])
+        if len(update['product'].strip()) > 0:
+            helprequest.setdefault('products', []).append(update['product'])
         return make_response(
             render_helprequest_as_html(helprequest), 200)
 
@@ -179,6 +179,11 @@ api.add_resource(HelpRequestList, '/requests')
 api.add_resource(HelpRequestListAsJSON, '/requests.json')
 api.add_resource(HelpRequest, '/request/<string:helprequest_id>')
 api.add_resource(HelpRequestAsJSON, '/request/<string:helprequest_id>.json')
+
+#api.add_resource(FarmRequestList, '/farm_requests')
+#api.add_resource(FarmRequestListAsJSON,'/farm_requests.json)
+#api.add_resource(FarmRequest, '/farm_request/<string:farm_request_id>')
+#api.add_resource(FarmRequestAsJSON, '/farm_request/<string:farm_request_id>.json')
 
 
 # Redirect from the index to the list of help requests.

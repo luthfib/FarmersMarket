@@ -1,5 +1,6 @@
 <!doctype html>
 <link rel="alternate" type="application/json" href="{{ request.path }}.json">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <title>All open help requests</title>
 
 {% if request.args["sort_by"] == "priority" %}
@@ -39,16 +40,56 @@
   {% endfor %}
 </ol>
 
+
+
+
+<script>
+$(document).ready(function() {
+    var max_fields      = 10; //maximum input boxes allowed
+    var wrapper         = $(".create"); //Fields wrapper
+    var add_button      = $(".add_field_button"); //Add button ID
+    
+    var x = 1; //initlal text box count
+    $(add_button).click(function(e){ //on add input button click
+        e.preventDefault();
+        if(x < max_fields){ //max input box allowed
+            x++; //text box increment
+            $(wrapper).append('<div><input type="text" name="prodcts"/><a href="#" class="remove_field">Remove</a></div>'); //add input box
+        }
+    });
+    
+    $(wrapper).on("click",".remove_field", function(e){ //user click on remove text
+        e.preventDefault(); $(this).parent('div').remove(); x--;
+    })
+});
+</script>
+
+
+
 <form class="helprequest-editor" action="{{ url_for('helprequestlist') }}" method="post">
   <label>from
     <input name="from" type="text">
   </label>
   <br>
-  <label>title
+  <label>Farmers Market Name
     <input name="title" type="text">
   </label>
   <br>
   <textarea name="description"></textarea>
   <br>  
-  <input class="create" type="submit" value="create new request">
+  <br>
+  <label>Products
+    <br>
+    <div class="create">
+      <button class="add_field_button">Add More Fields</button>
+  <textarea name="products"></textarea>
+  <textarea name="products"></textarea>
+  </label>
+  <br>  
+  <input class="create" type="submit" value="create new Farmers Market">
+</div>
 </form>
+
+
+    
+ 

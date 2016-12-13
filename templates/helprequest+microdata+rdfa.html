@@ -38,23 +38,36 @@ view data as JSON-LD</a>
   </label>
   <br>
 
-  <label>comments<br>
+
+
+
+
+
+
+
+<p>its mean to be here</p>
+
+
+
+
+
+
+  <label>Items<br>
     <ul>
-      {% for comment in helprequest.comments %}
-      <li itemprop="comment" itemscope itemtype="http://schema.org/Comment"
-          property="comment" typeof="Comment">
-        <p itemprop="text" property="text">{{ comment }}</p>
+      {% for item in helprequest.products %}
+      <li itemprop="d" itemscope itemtype="http://schema.org/d"
+          property="d" typeof="d">
+        <p itemprop="text" property="text">{{ item }}</p>
       </li>
       {% endfor %}
     </ul>
-    <textarea name="comment"></textarea>
+    <textarea name="product"></textarea>
   </label>
   <br>
   <input class="update" type="submit" value="update help request">
   <script>
     var form = document.querySelector('form.help-request-editor');
     var button = document.querySelector('form.help-request-editor input.update');
-
     button.addEventListener('click', function (event) {
       event.preventDefault();
       var request = new XMLHttpRequest();

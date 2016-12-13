@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<title>Order</title>
+<body>
+
+<ol>
+  {% for helprequest_id, helprequest in helprequests %}
+  <li itemscope
+      itemid="{{ url_for('helprequest', helprequest_id=helprequest_id, _external=True) }}"
+      resource="{{ url_for('helprequest', helprequest_id=helprequest_id, _external=True) }}"
+      vocab="http://schema.org/"
+      prefix="helpdesk: https://rawgit.com/sils-webinfo/helpdesk/master/vocab.ttl#"
+      property="helpdesk:helprequests"
+      typeof="helpdesk:HelpRequest">
+    <div itemprop="http://www.w3.org/ns/md#item"
+         itemscope itemtype="http://schema.org/CreativeWork/HelpRequest">
+    <time itemprop="dateCreated"
+          property="dateCreated"
+          datetime="{{ helprequest.time }}">{{ helprequest.time }}</time>
+    priority: {{ priorities[helprequest.priority] }}
+    <a href="{{ url_for('helprequest', helprequest_id=helprequest_id) }}">
+      <span itemprop="name" property="name">{{ helprequest.title }}</span>
+    </a>
+    </div>
+  </li>
+  {% endfor %}
+</ol>
+
+    
+<form action="Order.html">
+  <input type="submit" value="Pay">
+</form>     
+    
+</body>
+
+</html>

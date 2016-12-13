@@ -46,6 +46,17 @@ To run it:
    
    
    
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
    Types and Properties: 
    
    title/Local Businesss : This describes a schema defintion under place that describes a local businesss  http://schema.org/LocalBusiness

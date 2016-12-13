@@ -7,9 +7,9 @@
 view data as JSON-LD</a>
 
  {% for item in order %}
-      <li itemprop="d" itemscope itemtype="http://schema.org/d"
+      <li itemprop="d" itemscope itemtype="http://schema.org/Product"
           property="d" typeof="d">
-        <p itemprop="text" property="text">{{ item.products }}</p>
+        <p itemprop="text" property="text">{{ item }}</p>
        
       </li>
       {% endfor %}

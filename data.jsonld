@@ -1,47 +1,64 @@
-{ "@context":
-  { "helpdesk": "https://rawgit.com/sils-webinfo/helpdesk/master/vocab.ttl#",
-    "helprequests":
-    { "@id": "http://www.w3.org/2000/01/rdf-schema#member",
-      "@container": "@index"
-    },
-    "title": "http://schema.org/name",
-    "description": "http://schema.org/description",
-    "from": "http://schema.org/creator",
-    "time": "http://schema.org/dateCreated",
-    "items": "http://schema.org/comment"
-  },
-  "@id": "requests",
-  "helprequests":
-  { "fhs6jo" :
-    { "@type": "helpdesk:HelpRequest",
-      "@id": "request/fhs6jo",
-      "title" : "Flying Dutchman",
-      "description" : "This is the best store",
-      "from" : "gary@unc.edu",
-      "time" : "2014-10-13T12:00:4",
-      "daysOpen" : ["Saturday","Wednesday"],
-      "priority": 3,
-      "products": [ "apple","bear" ]
-    },
-    "dig73h":
-    { "@type": "helpdesk:HelpRequest",
-      "@id": "request/dig73h",
-      "title" : "Steak Galore",
-      "description" : "We are the steak kingddom",
-      "from" : "paul@unc.edu",
-      "time" : "2014-10-12T07:08:20",
-      "priority": 2,
-      "products": [ "fried steak","juice steak" ]
-    },
-    "0f4uqv":
-    { "@type": "helpdesk:HelpRequest",
-      "@id": "request/0f4uqv",
-      "title" : "Phillips Farm",
-      "description" : "We sell the best Fruits",
-      "from" : "ryanshaw@unc.edu",
-      "time" : "2014-10-12T23:40:21",
-      "priority": 1,
-      "products": [ "apple","pear" ]
-    }
-  }
+{
+	"@context": {
+		"helpdesk": "https://rawgit.com/sils-webinfo/helpdesk/master/vocab.ttl#",
+		"farms": {
+			"@id": "http://www.w3.org/2000/01/rdf-schema#member",
+			"@container": "@index"
+		},
+		"title": "http://schema.org/name",
+		"description": "http://schema.org/description",
+		"from": "http://schema.org/creator",
+		"time": "http://schema.org/dateCreated",
+		"items": "http://schema.org/comment"
+	},
+	"orders": {
+
+		"item-uuid": 10
+
+	},
+
+	"products": {
+
+		"name": "pear",
+		"price": 10,
+		"farm": "phillips Farm"
+
+	},
+
+
+	"@id": "requests",
+	"farms": {
+		"fhs6jo": {
+			"@type": "helpdesk:HelpRequest",
+			"@id": "request/fhs6jo",
+			"title": "Flying Dutchman",
+			"description": "This is the best store",
+			"from": "gary@unc.edu",
+			"time": "2014-10-13T12:00:4",
+			"daysOpen": ["Saturday", "Wednesday"],
+			"priority": 3,
+			"products": ["apple", "bear"]
+		},
+		"dig73h": {
+			"@type": "helpdesk:HelpRequest",
+			"@id": "request/dig73h",
+			"title": "Steak Galore",
+			"description": "We are the steak kingddom",
+			"from": "paul@unc.edu",
+			"time": "2014-10-12T07:08:20",
+			"priority": 2,
+			"products": ["fried steak", "juice steak"]
+		},
+		"0f4uqv": {
+			"@type": "helpdesk:HelpRequest",
+			"@id": "request/0f4uqv",
+			"title": "Phillips Farm",
+			"description": "We sell the best Fruits",
+			"from": "ryanshaw@unc.edu",
+			"time": "2014-10-12T23:40:21",
+			"priority": 1,
+			"products": ["apple", "pear"]
+		}
+	}
+
 }

@@ -18,10 +18,10 @@
 </form>
 
 <ol>
-  {% for helprequest_id, helprequest in helprequests %}
+  {% for farm_id, farm in farms %}
   <li itemscope
-      itemid="{{ url_for('helprequest', helprequest_id=helprequest_id, _external=True) }}"
-      resource="{{ url_for('helprequest', helprequest_id=helprequest_id, _external=True) }}"
+      itemid="{{ url_for('farm', farm_id=farm_id, _external=True) }}"
+      resource="{{ url_for('farm', farm_id=farm_id, _external=True) }}"
       vocab="http://schema.org/"
       prefix="helpdesk: https://rawgit.com/sils-webinfo/helpdesk/master/vocab.ttl#"
       property="helpdesk:helprequests"
@@ -30,10 +30,10 @@
          itemscope itemtype="http://schema.org/CreativeWork/HelpRequest">
     <time itemprop="dateCreated"
           property="dateCreated"
-          datetime="{{ helprequest.time }}">{{ helprequest.time }}</time>
-    priority: {{ priorities[helprequest.priority] }}
-    <a href="{{ url_for('helprequest', helprequest_id=helprequest_id) }}">
-      <span itemprop="name" property="name">{{ helprequest.title }}</span>
+          datetime="{{ farm.time }}">{{ farm.time }}</time>
+    priority: {{ priorities[farm.priority] }}
+    <a href="{{ url_for('farm', farm_id=farm_id) }}">
+      <span itemprop="name" property="name">{{ farm.title }}</span>
     </a>
     </div>
   </li>

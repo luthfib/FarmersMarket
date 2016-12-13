@@ -23,9 +23,9 @@ def generate_id(size=6, chars=string.ascii_lowercase + string.digits):
 
 
 # Respond with 404 Not Found if no help request with the specified ID exists.
-def error_if_helprequest_not_found(helprequest_id):
-    if helprequest_id not in data['helprequests']:
-        message = "No help request with ID: {}".format(helprequest_id)
+def error_if_helprequest_not_found(farm_id):
+    if farm_id not in data['farms']:
+        message = "No help request with ID: {}".format(farm_id)
         abort(404, message=message)
 
 
@@ -35,36 +35,36 @@ def filter_and_sort_helprequests(query='', sort_by='time'):
     # Returns True if the query string appears in the help request's
     # title or description.
     def matches_query(item):
-        (helprequest_id, helprequest) = item
-        text = helprequest['title'] + helprequest['description']
+        (farm_id, farm) = item
+        text = farm['title'] + farm['description']
         return query.lower() in text
 
     # Returns the help request's value for the sort property (which by
     # default is the "time" property).
     def get_sort_value(item):
-        (helprequest_id, helprequest) = item
-        return helprequest[sort_by]
+        (farm_id, farm) = item
+        return farm[sort_by]
 
-    filtered_helprequests = filter(matches_query, data['helprequests'].items())
+    filtered_helprequests = filter(matches_query, data['farms'].items())
 
     return sorted(filtered_helprequests, key=get_sort_value, reverse=True)
 
 
 # Given the data for a help request, generate an HTML representation
 # of that help request.
-def render_helprequest_as_html(helprequest):
+def render_helprequest_as_html(farm):
     return render_template(
         'helprequest+microdata+rdfa.html',
-        helprequest=helprequest,
+        farm=farm,
         priorities=reversed(list(enumerate(PRIORITIES))))
 
 
 # Given the data for a list of help requests, generate an HTML representation
 # of that list.
-def render_helprequest_list_as_html(helprequests):
+def render_helprequest_list_as_html(farms):
     return render_template(
         'helprequests+microdata+rdfa.html',
-        helprequests=helprequests,
+        farms=farms,
         priorities=PRIORITIES)
 
 
@@ -116,24 +116,24 @@ class HelpRequest(Resource):
 
     # If a help request with the specified ID does not exist,
     # respond with a 404, otherwise respond with an HTML representation.
-    def get(self, helprequest_id):
-        error_if_helprequest_not_found(helprequest_id)
+    def get(self, farm_id):
+        error_if_helprequest_not_found(farm_id)
         return make_response(
             render_helprequest_as_html(
-                data['helprequests'][helprequest_id]), 200)
+                data['farms'][farm_id]), 200)
 
     # If a help request with the specified ID does not exist,
     # respond with a 404, otherwise update the help request and respond
     # with the updated HTML representation.
-    def patch(self, helprequest_id):
-        error_if_helprequest_not_found(helprequest_id)
-        helprequest = data['helprequests'][helprequest_id]
+    def patch(self, farm_id):
+        error_if_helprequest_not_found(farm_id)
+        farm = data['farms'][farm_id]
         update = update_helprequest_parser.parse_args()
-        helprequest['priority'] = update['priority']
+        farm['priority'] = update['priority']
         if len(update['product'].strip()) > 0:
-            helprequest.setdefault("products", []).append(update['product'])
+            farm.setdefault("products", []).append(update['product'])
         return make_response(
-            render_helprequest_as_html(helprequest), 200)
+            render_helprequest_as_html(farm), 200)
 
 
 # Define a resource for getting a JSON representation of a help request.
@@ -141,11 +141,11 @@ class HelpRequestAsJSON(Resource):
 
     # If a help request with the specified ID does not exist,
     # respond with a 404, otherwise respond with a JSON representation.
-    def get(self, helprequest_id):
-        error_if_helprequest_not_found(helprequest_id)
-        helprequest = data['helprequests'][helprequest_id]
-        helprequest['@context'] = data['@context']
-        return helprequest
+    def get(self, farm_id):
+        error_if_helprequest_not_found(farm_id)
+        farm = data['farms'][farm_id]
+        farm['@context'] = data['@context']
+        return farm
 
 
 # Define our help request list resource.
@@ -162,13 +162,13 @@ class HelpRequestList(Resource):
     # Add a new help request to the list, and respond with an HTML
     # representation of the updated list.
     def post(self):
-        helprequest = new_helprequest_parser.parse_args()
-        helprequest_id = generate_id()
-        helprequest['@id'] = 'request/' + helprequest_id
-        helprequest['@type'] = 'helpdesk:HelpRequest'
-        helprequest['time'] = datetime.isoformat(datetime.now())
-        helprequest['priority'] = PRIORITIES.index('normal')
-        data['helprequests'][helprequest_id] = helprequest
+        farm = new_helprequest_parser.parse_args()
+        farm_id = generate_id()
+        farm['@id'] = 'request/' + farm_id
+        farm['@type'] = 'helpdesk:HelpRequest'
+        farm['time'] = datetime.isoformat(datetime.now())
+        farm['priority'] = PRIORITIES.index('normal')
+        data['farms'][farm_id] = farm
         return make_response(
             render_helprequest_list_as_html(
                 filter_and_sort_helprequests()), 201)
@@ -185,8 +185,7 @@ class HelpRequestListAsJSON(Resource):
 def render_order_list_as_html(order):
     return render_template(
         'order+microdata+rdfa.html',
-        order=order,
-        priorities=PRIORITIES)
+        order=order)
 
 
 
@@ -211,7 +210,7 @@ class OrderList(Resource):
         query = query_parser.parse_args()
         return make_response(
             render_order_list_as_html(
-                filter_and_sort_helprequests(**query)), 200)
+                self), 200)
     # Add a new help request to the list, and respond with an HTML
     # representation of the updated list.
     def post(self):
@@ -220,9 +219,10 @@ class OrderList(Resource):
         order = {}
         order_id = generate_id()
         order['products'] = 'request/' + order_id
+        order = orders['products']
         return make_response(
             render_order_list_as_html(
-                filter_and_sort_helprequests()), 201)
+                order), 201)
 
 
 
@@ -241,8 +241,8 @@ app = Flask(__name__)
 api = Api(app)
 api.add_resource(HelpRequestList, '/requests')
 api.add_resource(HelpRequestListAsJSON, '/requests.json')
-api.add_resource(HelpRequest, '/request/<string:helprequest_id>')
-api.add_resource(HelpRequestAsJSON, '/request/<string:helprequest_id>.json')
+api.add_resource(HelpRequest, '/request/<string:farm_id>')
+api.add_resource(HelpRequestAsJSON, '/request/<string:farm_id>.json')
 api.add_resource(OrderList, '/order_requests')
 api.add_resource(OrderListAsJSON, '/order_requests.json')
 

@@ -67,6 +67,12 @@ def render_helprequest_list_as_html(helprequests):
         helprequests=helprequests,
         priorities=PRIORITIES)
 
+def render_order_list_as_html(helprequests):
+    return render_template(
+        'order+microdata+rdfa.html',
+        helprequests=helprequests,
+        priorities=PRIORITIES)
+
 
 # Raises an error if the string x is empty (has zero length).
 def nonempty_string(x):
@@ -84,6 +90,17 @@ for arg in ['from', 'title', 'description','products']:
         arg, type=nonempty_string,  required=True,
         help="'{}' is a required value".format(arg))
     new_helprequest_parser.add_argument(
+        "products",
+        type=nonempty_string, action="append", required=True,
+        help="'{}' is a required value".format(arg))
+
+
+new_order_parser = reqparse.RequestParser()
+for arg in ['from', 'title', 'products']:
+    new_order_parser.add_argument(
+        arg, type=nonempty_string,  required=True,
+        help="'{}' is a required value".format(arg))
+    new_order_parser.add_argument(
         "products",
         type=nonempty_string, action="append", required=True,
         help="'{}' is a required value".format(arg))
@@ -183,12 +200,6 @@ class HelpRequestListAsJSON(Resource):
 
 
 
-def parserArgs(parser, elements):
-    for arg in elements:
-        parser.add_argument(
-            arg, type=nonempty_string, required=True,
-            help="'{}' is a required value".format(arg))
-
 
 class OrderList(Resource):
     # Respond with an HTML representation of the help request list, after
@@ -196,20 +207,20 @@ class OrderList(Resource):
     def get(self):
         query = query_parser.parse_args()
         return make_response(
-            render_helprequest_list_as_html(
+            render_order_list_as_html(
                 filter_and_sort_helprequests(**query)), 200)
     # Add a new help request to the list, and respond with an HTML
     # representation of the updated list.
     def post(self):
-        helprequest = new_helprequest_parser.parse_args()
-        helprequest_id = generate_id()
-        helprequest['@id'] = 'request/' + helprequest_id
-        helprequest['@type'] = 'helpdesk:HelpRequest'
-        helprequest['time'] = datetime.isoformat(datetime.now())
-        helprequest['priority'] = PRIORITIES.index('normal')
-        data['helprequests'][helprequest_id] = helprequest
+        order = new_order_parser.parse_args()
+        order_id = generate_id()
+        order['@id'] = 'request/' + order_id
+        order['@type'] = 'helpdesk:HelpRequest'
+        order['time'] = datetime.isoformat(datetime.now())
+        order['priority'] = PRIORITIES.index('normal')
+        data['helprequests'][order_id] = order
         return make_response(
-            render_helprequest_list_as_html(
+            render_order_list_as_html(
                 filter_and_sort_helprequests()), 201)
 
 
@@ -232,7 +243,7 @@ api.add_resource(HelpRequestListAsJSON, '/requests.json')
 api.add_resource(HelpRequest, '/request/<string:helprequest_id>')
 api.add_resource(HelpRequestAsJSON, '/request/<string:helprequest_id>.json')
 api.add_resource(OrderList, '/order_requests')
-api.add_resource(OrderListAsJSON,'/order_requests.json')
+api.add_resource(OrderListAsJSON, '/order_requests.json')
 
 
 

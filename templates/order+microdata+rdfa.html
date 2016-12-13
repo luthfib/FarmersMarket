@@ -1,0 +1,19 @@
+<!doctype html>
+<link rel="alternate" type="application/json" href="{{ request.path }}.json">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<title>Orders</title>
+
+<a href="{{ request.path }}.json">
+view data as JSON-LD</a>
+
+ {% for item in order.products %}
+      <li itemprop="d" itemscope itemtype="http://schema.org/d"
+          property="d" typeof="d">
+        <p itemprop="text" property="text">{{ item }}</p>
+        <input type="checkbox" name="products" value="{{ item }}" /> {{ item }} <br/>
+      </li>
+      {% endfor %}
+
+
+    
+ 

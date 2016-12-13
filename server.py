@@ -80,7 +80,7 @@ def nonempty_string(x):
 # Specify the data necessary to create a new help request.
 # "from", "title", and "description" are all required values.
 new_helprequest_parser = reqparse.RequestParser()
-for arg in ['from', 'title', 'description','products']:
+for arg in ['title', 'description','products']:
     new_helprequest_parser.add_argument(
         arg, type=nonempty_string,  required=True,
         help="'{}' is a required value".format(arg))
@@ -210,7 +210,7 @@ class OrderList(Resource):
         query = query_parser.parse_args()
         return make_response(
             render_order_list_as_html(
-                self), 200)
+                data.products), 200)
     # Add a new help request to the list, and respond with an HTML
     # representation of the updated list.
     def post(self):
@@ -219,7 +219,7 @@ class OrderList(Resource):
         order = {}
         order_id = generate_id()
         order['products'] = 'request/' + order_id
-        order = orders['products']
+        order = data['products']
         return make_response(
             render_order_list_as_html(
                 order), 201)

@@ -63,7 +63,7 @@ Types and Properties:
    
    time: Time in which the farm resouce was created  http://schema.org/dateCreated
    
-   item: Any offered product or service.In this case it is the items being sold by the farm  https://schema.org/Product
+   product: Any offered product or service.In this case it is the items being sold by the farm  https://schema.org/Product
    
    
    Classes

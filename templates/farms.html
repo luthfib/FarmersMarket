@@ -1,27 +1,15 @@
 <!doctype html>
 <link rel="alternate" type="application/json" href="{{ request.path }}.json">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-<title>All open help requests</title>
+<title>All farms</title>
 
 
 <ol>
-  {% for farm_id, helprequest in farms %}
-  <li itemscope
-      itemid="{{ url_for('helprequest', farm_id=farm_id, _external=True) }}"
-      resource="{{ url_for('helprequest', farm_id=farm_id, _external=True) }}"
-      vocab="http://schema.org/"
-      prefix="helpdesk: https://rawgit.com/sils-webinfo/helpdesk/master/vocab.ttl#"
-      property="helpdesk:helprequests"
-      typeof="helpdesk:HelpRequest">
-    <div itemprop="http://www.w3.org/ns/md#item"
-         itemscope itemtype="http://schema.org/CreativeWork/LocalBusiness">
-    <time itemprop="dateCreated"
-          property="dateCreated"
-          datetime="{{ helprequest.time }}">{{ helprequest.time }}</time>
-    <a href="{{ url_for('helprequest', farm_id=farm_id) }}">
-      <span itemprop="name" property="name">{{ helprequest.title }}</span>
+  {% for farm_id, farm in farms.items() %}
+  <li>
+    <a href="{{ url_for('farm', farm_id=farm_id) }}">
+      {{ farm.name }}
     </a>
-    </div>
   </li>
   {% endfor %}
 </ol>
@@ -51,11 +39,11 @@ $(document).ready(function() {
 
 
 
-<form class="request-editor" action="{{ url_for('helprequestlist') }}" method="post">
+<form class="farm-editor" action="{{ url_for('farmlist') }}" method="post">
   
   <label>Farmers Market Name
     <br>
-    <input name="title" type="text">
+    <input name="name" type="text">
   </label>
   <br>
   <label>Description
@@ -70,7 +58,7 @@ $(document).ready(function() {
      <div class="new_box">
          <button class="add_field_button">Add More Products(MAX 15)</button>
         </div> 
-      <input type="text" name="products" value="warm" />  <br/>
+      <input type="text" name="products" />  <br/>
   <br>  
   <input class="create" type="submit" value="create new Farmers Market">
 

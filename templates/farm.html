@@ -1,0 +1,27 @@
+<!doctype html>
+<link rel="alternate" type="application/json" href="{{ request.path }}.json">
+<title>{{ farm.name }}</title>
+
+<body itemscope itemtype="http://schema.org/LocalBusiness">
+
+<h1 itemprop="name">{{ farm.name }}</h1>  
+
+<p itemprop="description">{{ farm.description }}</p>
+
+<h2>Products</h2>
+<ul>
+  {% for item in farm.products %}
+  <li itemprop="makesOffer" itemscope itemtype="http://schema.org/Offer">
+    <div itemprop="itemOffered" itemscope itemtype="http://schema.org/Product">
+      <span itemprop="name">{{ item }}</span>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
+
+<br/>
+<a rel="collection" href="{{ url_for('farmlist') }}">all farms</a>
+
+</body>
+
+

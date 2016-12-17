@@ -1,0 +1,23 @@
+{
+  "farms": {
+    "fhs6jo": {
+      "@id": "farm/fhs6jo",
+      "name": "Flying Dutchman",
+      "description": "This is the best store",
+      "daysOpen": ["Saturday", "Wednesday"],
+      "products": ["apple", "bear"]
+    },
+    "dig73h": {
+      "@id": "farm/dig73h",
+      "name": "Steak Galore",
+      "description": "We are the steak kingddom",
+      "products": ["fried steak", "juice steak"]
+    },
+    "0f4uqv": {
+      "@id": "farm/0f4uqv",
+      "name": "Phillips Farm",
+      "description": "We sell the best Fruits",
+      "products": ["apple", "pear"]
+    }
+  }
+}

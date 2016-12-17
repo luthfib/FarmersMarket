@@ -8,22 +8,16 @@
 
 <p itemprop="description">{{ farm.description }}</p>
 
-<form action="{{ url_for('order') }}" method="post">
-  <h2>Products</h2>
-  <ul>
-    {% for item in farm.products %}
-    <li itemprop="makesOffer" itemscope itemtype="http://schema.org/Offer">
-      <div itemprop="itemOffered" itemscope itemtype="http://schema.org/Product">
-        <label itemprop="name">
-          <input type="checkbox" name="products" value="{{ item }}">
-          {{ item }}
-        </label>
-      </div>
-    </li>
-    {% endfor %}
-  </ul>
-  <input class="create" type="submit" value="Order">
-</form>
+<h2>Products</h2>
+<ul>
+  {% for item in farm.products %}
+  <li itemprop="makesOffer" itemscope itemtype="http://schema.org/Offer">
+    <div itemprop="itemOffered" itemscope itemtype="http://schema.org/Product">
+      <span itemprop="name">{{ item }}</span>
+    </div>
+  </li>
+  {% endfor %}
+</ul>
 
 <br/>
 <a rel="collection" href="{{ url_for('farmlist') }}">all farms</a>
